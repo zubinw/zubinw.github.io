@@ -3,12 +3,19 @@
 <head>
     <title>My Website</title>
     <style>
-        #share-link input {
-            width: 70%;
+        #copy-section select,
+        #copy-section textarea {
+            display: block;
+            width: 90%;
+            max-width: 500px;
             padding: 8px;
             font-size: 1rem;
+            margin-bottom: 8px;
         }
-        #share-link button {
+        #copy-section textarea {
+            height: 100px;
+        }
+        #copy-section button {
             padding: 8px 14px;
             cursor: pointer;
         }
@@ -18,23 +25,46 @@
     <h1>Hello, World!</h1>
     <p>Welcome to my GitHub Pages website.</p>
 
-    <section id="share-link">
-        <h2>Share Link</h2>
-        <input type="text" id="linkInput" value="https://example.com/your-link" readonly>
+    <section id="copy-section">
+        <h2>Copy This Text</h2>
+
+        <!-- CHANGE #1: the dropdown names people see -->
+        <select id="textPicker">
+            <option value="first">Option 1</option>
+            <option value="second">Option 2</option>
+            <option value="third">Option 3</option>
+        </select>
+
+        <textarea id="copyText" readonly></textarea>
         <button id="copyBtn">Copy</button>
     </section>
 
     <script>
-        document.getElementById("copyBtn").addEventListener("click", async () => {
-            const input = document.getElementById("linkInput");
+        // CHANGE #2: the text that goes with each option.
+        // The names on the left must match the value="" in the dropdown above.
+        const texts = {
+            first: "This is the text for option 1.",
+            second: "This is the text for option 2.",
+            third: "This is the text for option 3."
+        };
+
+        const picker = document.getElementById("textPicker");
+        const box = document.getElementById("copyText");
+        const btn = document.getElementById("copyBtn");
+
+        // Show the right text when the page loads and when the dropdown changes
+        box.value = texts[picker.value];
+        picker.addEventListener("change", () => {
+            box.value = texts[picker.value];
+        });
+
+        btn.addEventListener("click", async () => {
             try {
-                await navigator.clipboard.writeText(input.value);
-                document.getElementById("copyBtn").textContent = "Copied!";
-                setTimeout(() => {
-                    document.getElementById("copyBtn").textContent = "Copy";
-                }, 2000);
+                await navigator.clipboard.writeText(box.value);
+                btn.textContent = "Copied!";
+                setTimeout(() => { btn.textContent = "Copy"; }, 2000);
             } catch (err) {
-                input.select();
+                box.select(); // fallback: highlights text so they can press Ctrl+C
             }
         });
     </script>
