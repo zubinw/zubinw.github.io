@@ -2,9 +2,41 @@
 <html>
 <head>
     <title>My Website</title>
+    <style>
+        #share-link input {
+            width: 70%;
+            padding: 8px;
+            font-size: 1rem;
+        }
+        #share-link button {
+            padding: 8px 14px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <h1>Hello, World!</h1>
     <p>Welcome to my GitHub Pages website.</p>
+
+    <section id="share-link">
+        <h2>Share Link</h2>
+        <input type="text" id="linkInput" value="https://example.com/your-link" readonly>
+        <button id="copyBtn">Copy</button>
+    </section>
+
+    <script>
+        document.getElementById("copyBtn").addEventListener("click", async () => {
+            const input = document.getElementById("linkInput");
+            try {
+                await navigator.clipboard.writeText(input.value);
+                document.getElementById("copyBtn").textContent = "Copied!";
+                setTimeout(() => {
+                    document.getElementById("copyBtn").textContent = "Copy";
+                }, 2000);
+            } catch (err) {
+                input.select();
+            }
+        });
+    </script>
 </body>
 </html>
